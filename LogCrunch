@@ -1,0 +1,109 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Feb 15 18:31:17 2022
+
+@author: jibin
+"""
+
+import glob
+import re
+import pandas as pd
+import numpy as np
+from datetime import datetime
+import csv
+import sys
+
+CSVFile = r'Output_V5.csv'
+
+h = open(CSVFile, 'a')
+
+# filepath = open(r'RMSData_2022-01-01.log', 'r').read().splitlines()
+
+
+# for file in glob.iglob('//fssvm7gen1-lif2/rda_backup/HEBIASCA00/JIbin/H5T_Monitor_Log_20220118/*.log', recursive=True):
+# for file in glob.iglob('//fssvm7gen1-lif2/rda_backup/HEBIASCA00/JIbin/SCC_Monitor_Log_20220107/*.log', recursive=True):
+for file in glob.iglob('//fssvm7gen1-lif2/rda_backup/HEBIASCA00/JIbin/SCC_Monitor_Log_20220216/*.log', recursive=True):
+    
+    filepath = open(file).read().splitlines()
+    
+    for line in filepath:
+        
+        if ('[TestStart]' in line):
+              line = line.split()
+             
+              date = line[0:1]
+              date = [sub.replace(',', '') for sub in date]
+              date = (''.join(date))
+             
+              time = line[1:2]
+              time = [sub.replace(',', '') for sub in time]
+              time = (''.join(time))
+             
+              RecipeName = line[6:7]
+              RecipeName = [sub.replace('RecipeName=', '') for sub in RecipeName]
+              RecipeName = [sub.replace(',', '') for sub in RecipeName]
+              RecipeName = (''.join(RecipeName))
+              
+              TestId = line[7:8]
+              TestId = [sub.replace('TestId=', '') for sub in TestId]
+              TestId = [sub.replace(',', '') for sub in TestId]
+              TestId = (''.join(TestId))
+             
+              DeviceId = line[8:9]
+              DeviceId = [sub.replace('DeviceId=', '') for sub in DeviceId]
+              DeviceId = [sub.replace(',', '') for sub in DeviceId]
+              DeviceId = (''.join(DeviceId))
+             
+              StepId = line[9:10]
+              StepId = [sub.replace('StepId=', '') for sub in StepId]
+              StepId = [sub.replace(',', '') for sub in StepId]
+              StepId = (''.join(StepId))
+             
+              LotId = line[10:11]
+              LotId= [sub.replace('LotId=', '') for sub in LotId]
+              LotId = [sub.replace(',', '') for sub in LotId]
+              LotId = (''.join(LotId))
+             
+              waferId = line[11:12]
+              waferId = [sub.replace('waferId=', '') for sub in waferId]
+              waferId = [sub.replace(',', '') for sub in waferId]
+              waferId = (''.join(waferId))
+    
+                 
+        else: 
+            if ('[AutoStigmatorSharpness]' in line):
+             line = line.split()
+            
+             refImageSharpness = line[6:7]
+             refImageSharpness = [sub.replace('refImageSharpness=', '') for sub in refImageSharpness]
+             refImageSharpness = [sub.replace(',', '') for sub in refImageSharpness]
+             refImageSharpness = (''.join(refImageSharpness))
+             
+             actualImageSharpness = line[7:8]
+             actualImageSharpness = [sub.replace('actualImageSharpness=', '') for sub in actualImageSharpness]
+             actualImageSharpness = [sub.replace(',', '') for sub in actualImageSharpness]
+             actualImageSharpness = (''.join(actualImageSharpness))
+             
+             differencePercentage = line[8:9]
+             differencePercentage = [sub.replace('differencePercentage=', '') for sub in differencePercentage]
+             differencePercentage = [sub.replace(',', '') for sub in differencePercentage]
+             differencePercentage = (''.join(differencePercentage))
+             
+             thresholdPercentage = line[9:10]
+             thresholdPercentage = [sub.replace('thresholdPercentage=', '') for sub in thresholdPercentage]
+             thresholdPercentage = [sub.replace(',', '') for sub in thresholdPercentage]
+             thresholdPercentage = (''.join(thresholdPercentage))
+             
+             CheckStigmatorSharpnessPass = line[10:11]
+             CheckStigmatorSharpnessPass = [sub.replace('CheckStigmatorSharpnessPass=', '') for sub in CheckStigmatorSharpnessPass]
+             CheckStigmatorSharpnessPass = [sub.replace(',', '') for sub in CheckStigmatorSharpnessPass]
+             CheckStigmatorSharpnessPass = (''.join(CheckStigmatorSharpnessPass))
+    
+             h.write(str(date) + ',' + str(time) + ',' + 
+                     str(RecipeName) + ',' + str(TestId) + ',' + str(DeviceId) + ',' + str(StepId) + ',' + 
+                     str(LotId) + ',' + str(waferId) + ',' + 
+                     str(refImageSharpness) + ',' + str(actualImageSharpness) + ',' + str(differencePercentage) + ',' + 
+                     str(thresholdPercentage) + ',' + str(CheckStigmatorSharpnessPass) + ',' + '\n')
+
+
+h.close()
